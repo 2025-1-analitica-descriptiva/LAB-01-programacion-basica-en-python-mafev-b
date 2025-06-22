@@ -27,3 +27,20 @@ def pregunta_08():
      (9, ['A', 'B', 'C', 'E'])]
 
     """
+
+with open('./files/input/data.csv', 'r') as file:
+        lines = file.readlines()
+
+    value_to_letters = {}
+    for line in lines:
+        columns = line.split()
+        letter = columns[0]
+        value = int(columns[1])
+        if value in value_to_letters:
+            if letter not in value_to_letters[value]:
+                value_to_letters[value].append(letter)
+        else:
+            value_to_letters[value] = [letter]
+    result = [(value, sorted(set(letters))) for value, letters in value_to_letters.items()]
+    result.sort()
+    return result

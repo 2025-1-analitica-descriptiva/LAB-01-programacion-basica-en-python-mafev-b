@@ -15,3 +15,17 @@ def pregunta_12():
     {'A': 177, 'B': 187, 'C': 114, 'D': 136, 'E': 324}
 
     """
+
+ with open('./files/input/data.csv', 'r') as file:
+        lines = file.readlines()
+    result = {}
+    for line in lines:
+        columns = line.split()
+        letter = columns[0]
+        vals = columns[4].split(',')
+        for val in vals:
+            if letter in result:
+                result[letter] += int(val.split(':')[1])
+            else:
+                result[letter] = int(val.split(':')[1])
+    return result

@@ -16,3 +16,18 @@ def pregunta_11():
 
 
     """
+
+with open('./files/input/data.csv', 'r') as file:
+        lines = file.readlines()
+    sums = {}
+    for line in lines:
+        columns = line.split()
+        letters = columns[3].split(',')
+        value = int(columns[1])
+        for letter in letters:
+            if letter in sums:
+                sums[letter] += value
+            else:
+                sums[letter] = value
+    sorted_sums = dict(sorted(sums.items()))
+    return sorted_sums
