@@ -5,6 +5,17 @@ solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
 
+def read_dataset(filepath):
+    """
+    Reads a tab-separated CSV file and returns a list of rows,
+    where each row is a list of column values.
+    """
+    rows = []
+    with open(filepath, "r") as file:
+        for line in file:
+            cols = line.strip().split("\t")
+            rows.append(cols)
+    return rows
 
 def pregunta_12():
     """
@@ -15,17 +26,15 @@ def pregunta_12():
     {'A': 177, 'B': 187, 'C': 114, 'D': 136, 'E': 324}
 
     """
+    data = read_dataset("files/input/data.csv")
+    sums = {}
 
- with open('./files/input/data.csv', 'r') as file:
-        lines = file.readlines()
-    result = {}
-    for line in lines:
-        columns = line.split()
-        letter = columns[0]
-        vals = columns[4].split(',')
-        for val in vals:
-            if letter in result:
-                result[letter] += int(val.split(':')[1])
-            else:
-                result[letter] = int(val.split(':')[1])
-    return result
+    for row in data:
+        letra = row[0]
+        items = row[4].split(',')
+        suma = sum(int(item.split(':')[1]) for item in items)
+        sums[letra] = sums.get(letra, 0) + suma
+
+    # Retornar el diccionario ordenado por las letras
+    return dict(sorted(sums.items()))
+
