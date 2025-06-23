@@ -4,7 +4,17 @@ datos requeridos se encuentran en el archivo data.csv. En este laboratorio
 solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
-
+def read_dataset(filepath):
+    """
+    Reads a tab-separated CSV file and returns a list of rows,
+    where each row is a list of column values.
+    """
+    rows = []
+    with open(filepath, "r") as file:
+        for line in file:
+            cols = line.strip().split("\t")
+            rows.append(cols)
+    return rows
 
 def pregunta_04():
     """
@@ -24,23 +34,15 @@ def pregunta_04():
      ('10', 2),
      ('11', 2),
      ('12', 3)]
-
     """
+    data = read_dataset("files/input/data.csv")
+    months = {}
 
-with open('./files/input/data.csv', 'r') as file:
-        lines = file.readlines()
-
-    counts = {}
-
-    for line in lines:
-        columns = line.split()
-        date = columns[2]
+    for row in data:
+        date = row[2]
         month = date.split('-')[1]
-        if month in counts:
-            counts[month] += 1
-        else:
-            counts[month] = 1
+        months[month] = months.get(month, 0) + 1
 
-    sorted_counts = sorted(counts.items())
+    result = sorted(months.items())
+    return result
 
-    return sorted_counts

@@ -5,6 +5,17 @@ solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
 
+def read_dataset(filepath):
+    """
+    Reads a tab-separated CSV file and returns a list of rows,
+    where each row is a list of column values.
+    """
+    rows = []
+    with open(filepath, "r") as file:
+        for line in file:
+            cols = line.strip().split("\t")
+            rows.append(cols)
+    return rows
 
 def pregunta_08():
     """
@@ -27,20 +38,16 @@ def pregunta_08():
      (9, ['A', 'B', 'C', 'E'])]
 
     """
+    data = read_dataset("files/input/data.csv")
+    value_letters = {}
 
-with open('./files/input/data.csv', 'r') as file:
-        lines = file.readlines()
+    for row in data:
+        letter = row[0]
+        value = int(row[1])
+        if value not in value_letters:
+            value_letters[value] = set()
+        value_letters[value].add(letter)
 
-    value_to_letters = {}
-    for line in lines:
-        columns = line.split()
-        letter = columns[0]
-        value = int(columns[1])
-        if value in value_to_letters:
-            if letter not in value_to_letters[value]:
-                value_to_letters[value].append(letter)
-        else:
-            value_to_letters[value] = [letter]
-    result = [(value, sorted(set(letters))) for value, letters in value_to_letters.items()]
-    result.sort()
+    result = [(value, sorted(list(value_letters[value]))) for value in sorted(value_letters.keys())]
     return result
+

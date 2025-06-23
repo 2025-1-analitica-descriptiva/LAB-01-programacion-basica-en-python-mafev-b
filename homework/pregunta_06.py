@@ -5,6 +5,17 @@ solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
 
+def read_dataset(filepath):
+    """
+    Reads a tab-separated CSV file and returns a list of rows,
+    where each row is a list of column values.
+    """
+    rows = []
+    with open(filepath, "r") as file:
+        for line in file:
+            cols = line.strip().split("\t")
+            rows.append(cols)
+    return rows
 
 def pregunta_06():
     """
@@ -26,28 +37,22 @@ def pregunta_06():
      ('jjj', 5, 17)]
 
     """
+    data = read_dataset("files/input/data.csv")
+    key_values = {}
 
- with open('./files/input/data.csv', 'r') as file:
-        lines = file.readlines()
-
-    min_max_values = {}
-
-    for line in lines:
-        columns = line.split()
-        dictionary_str = columns[4]
-        dictionary_items = dictionary_str.split(',')
-
-        for item in dictionary_items:
+    for row in data:
+        items = row[4].split(',')
+        for item in items:
             key, value = item.split(':')
             value = int(value)
-
-            if key in min_max_values:
-                min_max_values[key][0] = min(min_max_values[key][0], value)
-                min_max_values[key][1] = max(min_max_values[key][1], value)
+            if key not in key_values:
+                key_values[key] = [value, value]
             else:
-                min_max_values[key] = [value, value]
+                if value < key_values[key][0]:
+                    key_values[key][0] = value
+                if value > key_values[key][1]:
+                    key_values[key][1] = value
 
-    result = [(key, values[0], values[1]) for key, values in min_max_values.items()]
-    result.sort()
-
+    result = [(key, key_values[key][0], key_values[key][1]) for key in sorted(key_values.keys())]
     return result
+

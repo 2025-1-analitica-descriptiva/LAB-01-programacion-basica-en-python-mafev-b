@@ -4,7 +4,17 @@ datos requeridos se encuentran en el archivo data.csv. En este laboratorio
 solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
-
+def read_dataset(filepath):
+    """
+    Reads a tab-separated CSV file and returns a list of rows,
+    where each row is a list of column values.
+    """
+    rows = []
+    with open(filepath, "r") as file:
+        for line in file:
+            cols = line.strip().split("\t")
+            rows.append(cols)
+    return rows
 
 def pregunta_09():
     """
@@ -24,21 +34,14 @@ def pregunta_09():
      'jjj': 18}}
 
     """
+    data = read_dataset("files/input/data.csv")
+    key_count = {}
 
-with open('./files/input/data.csv', 'r') as file:
-        lines = file.readlines()
+    for row in data:
+        items = row[4].split(',')
+        for item in items:
+            key = item.split(':')[0]
+            key_count[key] = key_count.get(key, 0) + 1
 
-    counts = {}
+    return dict(sorted(key_count.items()))
 
-    for line in lines:
-        columns = line.split()
-        dictionary_str = columns[4]
-        dictionary_items = dictionary_str.split(',')
-
-        for item in dictionary_items:
-            key, value = item.split(':')
-            if key in counts:
-                counts[key] += 1
-            else:
-                counts[key] = 1
-    return counts

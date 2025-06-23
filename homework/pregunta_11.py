@@ -5,6 +5,17 @@ solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
 
+def read_dataset(filepath):
+    """
+    Reads a tab-separated CSV file and returns a list of rows,
+    where each row is a list of column values.
+    """
+    rows = []
+    with open(filepath, "r") as file:
+        for line in file:
+            cols = line.strip().split("\t")
+            rows.append(cols)
+    return rows
 
 def pregunta_11():
     """
@@ -16,18 +27,15 @@ def pregunta_11():
 
 
     """
-
-with open('./files/input/data.csv', 'r') as file:
-        lines = file.readlines()
+    data = read_dataset("files/input/data.csv")
     sums = {}
-    for line in lines:
-        columns = line.split()
-        letters = columns[3].split(',')
-        value = int(columns[1])
-        for letter in letters:
-            if letter in sums:
-                sums[letter] += value
-            else:
-                sums[letter] = value
-    sorted_sums = dict(sorted(sums.items()))
-    return sorted_sums
+
+    for row in data:
+        value = int(row[1])
+        letras = row[3].split(',')
+        for letra in letras:
+            sums[letra] = sums.get(letra, 0) + value
+
+    return dict(sorted(sums.items()))
+
+
